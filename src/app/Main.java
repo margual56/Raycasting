@@ -31,10 +31,10 @@ public class Main extends PApplet {
 		walls[0] = new Wall(random(limit-1), random(height-1), random(limit-1), random(height-1));
 		walls[1] = new Wall(random(limit-1), random(height-1), random(limit-1), random(height-1));
 		walls[2] = new Wall(random(limit-1), random(height-1), random(limit-1), random(height-1));
-		walls[3] = new Wall(0, 0, limit-1, 0);
+		/*walls[3] = new Wall(0, 0, limit-1, 0);
 		walls[4] = new Wall(0, 0, 0, height-1);
 		walls[5] = new Wall(limit-1, height-1, limit-1, 0);
-		walls[6] = new Wall(limit-1, height-1, 0, height-1);
+		walls[6] = new Wall(limit-1, height-1, 0, height-1);*/
 
 		p = new Player(width / 2, height / 2, walls);
 
