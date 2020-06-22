@@ -10,7 +10,7 @@ Wall wall = new Wall(random(width-1), random(height-1), random(width-1), random(
 ```
 
 ## How to import into eclipse
-Download processing from the [Processing page](https://processing.org/download/) and go into the folder where you extracted it. Then, "ore > library > core.jar". You will need to add the core.jar into the external libraries of the project. After that, everything will work.
+Download processing from the [Processing page](https://processing.org/download/) and go into the folder where you extracted it. Then, "core > library > core.jar". You will need to add the core.jar into the external libraries of the project. After that, everything will work.
 
 ## License
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
