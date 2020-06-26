@@ -1,11 +1,11 @@
 package app;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import geometry.Wall;
 import maths.Ray;
-import processing.core.PConstants;
 import maths.Vector;
 
 public class Player {
@@ -73,30 +73,28 @@ public class Player {
 	}
 
 	public void paint(Graphics g) {
-		g.fill(255);
-		g.noStroke();
-		g.rectMode(PConstants.CENTER);
-		g.rect(main.width / 2, main.height / 2, main.width, main.height);
+		g.setColor(Color.white);
+		g.fillRect(0, 0, Main.width, Main.height);
 
-		g.fill(0);
 		for (Vector pt : points) {
-			g.stroke(0, 50);
-			g.line(pos.x, pos.y, pt.x, pt.y);
+			g.setColor(Color.black);
+			g.fillOval((int) pt.x, (int) pt.y, 5, 5);
 
-			g.noStroke();
-			g.ellipse(pt.x, pt.y, 5, 5);
+			g.setColor(new Color(0, 0, 0, 50));
+			g.drawLine((int) pos.x, (int) pos.y, (int) pt.x, (int) pt.y);
 		}
 	}
 
-	public void showLight(Main main) {
-		main.fill(255, 50);
-		main.noStroke();
+	public void showLight(Graphics g) {
+		g.setColor(new Color(255, 255, 255, 50));
 
-		for (Vector pt : points) {
-			main.vertex(pt.x, pt.y);
+		for (int i = 1; i < points.length; i++) {
+			g.drawLine((int) points[i - 1].x, (int) points[i - 1].y, (int) points[i].x, (int) points[i].y);
 		}
 
-		main.endShape(Main.CLOSE);
+		//Close the shape
+		g.drawLine((int) points[points.length - 1].x, (int) points[points.length - 1].y, (int) points[0].x,
+				(int) points[0].y);
 	}
 
 	private Vector[] calculatePoints() {
@@ -125,55 +123,52 @@ public class Player {
 	}
 
 	public void render(Graphics g) {
-		g.beginDraw();
-		g.fill(0);
-		g.noStroke();
-		g.rectMode(PConstants.CENTER);
-		g.rect(g.width / 2, g.height / 2, g.width, g.height);
+		g.setColor(Color.black);
+		g.fillRect(0, 0, Main.width, Main.height);
 
 		if (points.length == 0) {
-			g.endDraw();
 			return;
 		}
 
-		double w = g.width / points.length;
+		int w = (int) Math.round((double) Main.width / points.length);
 
 		int i = 0;
 		for (Vector pt : points) {
-			double x = (double) ((i + 0.5) * w);
+			int x = (int) ((i + 0.5) * w);
 
-			double dist = euclideanDistance(pt);
+			//double dist = euclideanDistance(pt);
 
-			double height = distanceToProjectionPlane * Wall.height /  Vector.dist(pos, pt);
-			double brightness = Wall.getBrightness(Vector.dist(pos, pt));
+			int height = (int) Math.round((double) distanceToProjectionPlane * Wall.height / Vector.dist(pos, pt));
+			int brightness = (int) Math.round(Wall.getBrightness(Vector.dist(pos, pt)));
 
-			g.fill(brightness);
-			g.rect(x, g.height / 2, w, height);
+			g.setColor(new Color(brightness, brightness, brightness));
+			g.fillRect(x - w / 2, (int) Math.round(Main.height / 2.0 - height / 2.0), w, height);
 
 			i++;
 		}
-
-		g.endDraw();
 	}
 
-	public void minimap(Graphics g, Main main) {
-		double xscale = (double) g.width / (double) main.width;
-		double yscale = (double) g.height / (double) main.height;
+	public void minimap(Graphics g) {
+		double xscale = (double) g.getClipBounds().width / (double) Main.width;
+		double yscale = (double) g.getClipBounds().height / (double) Main.height;
 
-		g.stroke(0);
-		g.fill(255);
-		g.pushMatrix();
-		g.translate(pos.x * xscale, pos.y * yscale);
-		g.ellipse(0, 0, 15, 15);
+		int xoffset = (int)Math.round(pos.x * xscale);
+		int yoffset = (int)Math.round(pos.y * yscale);
+		//translate(, pos.y * yscale);
+		/*g.stroke(0);
+		g.fill(255);*/
+		
+		g.setColor(Color.white);
+		g.fillOval(xoffset, yoffset, 15, 15);
+		g.setColor(Color.black);
+		g.drawOval(xoffset, yoffset, 15, 15);
 
-		g.stroke(255, 0, 0);
-		g.line(0, 0, 30 * Main.cos(angle), 30 * Main.sin(angle));
+		g.setColor(new Color(255, 0, 0));
+		g.drawLine(xoffset, yoffset, (int)Math.round(xoffset + 30 * Math.cos(angle)), (int)Math.round(yoffset + 30 * Math.sin(angle)));
 
 		/*for (Vector pt : points) {
 			g.line(0, 0, (pt.x-pos.x) * xscale, (pt.y -pos.y)* yscale);
 		}*/
-		
-		g.popMatrix();
 	}
 
 	private double euclideanDistance(Vector p) {
