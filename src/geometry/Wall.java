@@ -2,7 +2,7 @@ package geometry;
 
 import app.Main;
 import maths.Segment;
-import processing.core.PVector;
+import maths.Vector;
 
 public class Wall extends Segment {
 	public static final float height = 1080;
@@ -11,7 +11,7 @@ public class Wall extends Segment {
 		super(x1, y1, x2, y2);
 	}
 
-	public Wall(PVector a, PVector b) {
+	public Wall(Vector a, Vector b) {
 		super(a, b);
 	}
 	
@@ -30,7 +30,7 @@ public class Wall extends Segment {
 		
 		main.pushMatrix();
 		main.translate(this.getA().x, this.getA().y);
-		main.rotate(PVector.angleBetween(this.getA(), this.getB()));
+		main.rotate(Vector.angleBetween(this.getA(), this.getB()));
 		main.rect(0, 0, Main.sqrt((float) (Math.pow(this.getA().x-this.getB().x, 2) + Main.pow(this.getA().y-this.getB().y, 2))), 5);
 		main.popMatrix();
 	}*/

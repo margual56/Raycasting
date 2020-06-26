@@ -1,46 +1,47 @@
 package maths;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import app.Main;
-import processing.core.PGraphics;
-import processing.core.PVector;
 
 public class Segment{
-	private PVector a, b;
+	private Vector a, b;
 
-	public Segment(float x1, float y1, float x2, float y2) {
-		a = new PVector(x1, y1);
-		b = new PVector(x2, y2);
+	public Segment(double x1, double y1, double x12, double y2) {
+		a = new Vector(x1, y1);
+		b = new Vector(x12, y2);
 	}
 
-	public Segment(PVector a, PVector b) {
+	public Segment(Vector a, Vector b) {
 		this.a = a.copy();
 		this.b = b.copy();
 	}
 
-	public void show(Main main) {
-		main.stroke(255);
-		main.line(a.x, a.y, b.x, b.y);
+	public void paint(Graphics g) {
+		g.setColor(Color.white);
+		g.drawLine((int)a.x, (int)a.y, (int)b.x, (int)b.y);
 	}
 	
-	public void show(PGraphics g, Main main) {
-		float xscale = (float)g.width / (float)main.width;
-		float yscale = (float)g.height / (float)main.height;
-		g.line(a.x * xscale, a.y * yscale, b.x * xscale, b.y * yscale);
+	public void paint(Graphics g, Main main) {
+		double xscale = (double)g.getClipBounds().width / (double)main.width;
+		double yscale = (double)g.getClipBounds().height / (double)main.height;
+		g.drawLine((int)(a.x * xscale), (int)(a.y * yscale), (int)(b.x * xscale), (int)(b.y * yscale));
 	}
 
-	public PVector getA() {
+	public Vector getA() {
 		return a;
 	}
 
-	public void setA(PVector a) {
+	public void setA(Vector a) {
 		this.a = a;
 	}
 
-	public PVector getB() {
+	public Vector getB() {
 		return b;
 	}
 
-	public void setB(PVector b) {
-		this.b = b;
+	public void setB(Vector vector) {
+		this.b = vector;
 	}
 }

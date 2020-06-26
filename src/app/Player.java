@@ -1,46 +1,47 @@
 package app;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import geometry.Wall;
 import maths.Ray;
 import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PVector;
+import maths.Vector;
 
 public class Player {
-	public static final float FOV = 60;
-	public static final float PIXELS = 300;
-	public static final float RESOLUTION = FOV / PIXELS;
-	public static final float SPEED = 10;
-	private PVector pos;
+	public static final double FOV = Math.toRadians(60);
+	public static final double PIXELS = 300;
+	public static final double RESOLUTION = FOV / PIXELS;
+	public static final double SPEED = 10;
+	private Vector pos;
 	private ArrayList<Ray> rays = new ArrayList<Ray>();
-	private float angle = 0, distanceToProjectionPlane;
-	private PVector points[];
+	double angle = 0;
+	private double distanceToProjectionPlane;
+	private Vector points[];
 	private Wall walls[];
 
-	public Player(float x, float y, Wall[] walls) {
-		pos = new PVector(x, y);
+	public Player(double x, double y, Wall[] walls) {
+		pos = new Vector(x, y);
 
 		for (double a = -FOV / 2.0; a < FOV / 2.0; a += RESOLUTION) {
-			rays.add(new Ray(x, y, Main.radians((float) a)));
+			rays.add(new Ray(x, y, a));
 		}
 
-		distanceToProjectionPlane = PIXELS / (2 * Main.tan(Main.radians(FOV)));
+		distanceToProjectionPlane = PIXELS / (2 * Math.tan(FOV));
 
 		this.walls = walls;
 	}
 
-	public void lookAt(float x, float y) {
-		angle = Main.atan2(y - pos.y, x - pos.x);
+	public void lookAt(double x, double y) {
+		angle = Math.atan2(y - pos.y, x - pos.x);
 
 		rays.clear();
 		for (double a = -FOV / 2.0 + angle; a < FOV / 2.0 + angle; a += RESOLUTION) {
-			rays.add(new Ray(x, y, Main.radians((float) a)));
+			rays.add(new Ray(x, y, a));
 		}
 	}
 
-	public void rotate(float ang) {
+	public void rotate(double ang) {
 		this.angle += ang;
 
 		for (Ray r : rays) {
@@ -48,22 +49,22 @@ public class Player {
 		}
 	}
 
-	public void move(float dir) {
-		float movx = dir * Main.cos(angle) * SPEED;
-		float movy = dir * Main.sin(angle) * SPEED;
+	public void move(double dir) {
+		double movx = dir * Math.cos(angle) * SPEED;
+		double movy = dir * Math.sin(angle) * SPEED;
 
-		this.pos.add(movx, movy);
+		this.pos.add(new Vector(movx, movy));
 	}
 
-	public void update(float x, float y) {
-		this.pos = new PVector(x, y);
+	public void update(double x, double y) {
+		this.pos = new Vector(x, y);
 
 		for (Ray r : rays) {
 			r.update(x, y);
 		}
 	}
 
-	public void update(float ang) {
+	public void update(double ang) {
 		this.angle = ang;
 
 		for (Ray r : rays) {
@@ -71,19 +72,19 @@ public class Player {
 		}
 	}
 
-	public void show(Main main) {
-		main.fill(255);
-		main.noStroke();
-		main.rectMode(PConstants.CENTER);
-		main.rect(main.width / 2, main.height / 2, main.width, main.height);
+	public void paint(Graphics g) {
+		g.fill(255);
+		g.noStroke();
+		g.rectMode(PConstants.CENTER);
+		g.rect(main.width / 2, main.height / 2, main.width, main.height);
 
-		main.fill(0);
-		for (PVector pt : points) {
-			main.stroke(0, 50);
-			main.line(pos.x, pos.y, pt.x, pt.y);
+		g.fill(0);
+		for (Vector pt : points) {
+			g.stroke(0, 50);
+			g.line(pos.x, pos.y, pt.x, pt.y);
 
-			main.noStroke();
-			main.ellipse(pt.x, pt.y, 5, 5);
+			g.noStroke();
+			g.ellipse(pt.x, pt.y, 5, 5);
 		}
 	}
 
@@ -91,21 +92,21 @@ public class Player {
 		main.fill(255, 50);
 		main.noStroke();
 
-		for (PVector pt : points) {
+		for (Vector pt : points) {
 			main.vertex(pt.x, pt.y);
 		}
 
 		main.endShape(Main.CLOSE);
 	}
 
-	private PVector[] calculatePoints() {
-		ArrayList<PVector> points = new ArrayList<PVector>();
+	private Vector[] calculatePoints() {
+		ArrayList<Vector> points = new ArrayList<Vector>();
 
 		for (Ray r : rays) {
-			float record = Float.MAX_VALUE;
-			PVector best = null;
+			double record = Double.MAX_VALUE;
+			Vector best = null;
 			for (Wall wall : walls) {
-				PVector pt = r.cast(wall);
+				Vector pt = r.cast(wall);
 
 				if (pt != null) {
 					if (pt.dist(pos) < record) {
@@ -120,10 +121,10 @@ public class Player {
 			}
 		}
 
-		return points.toArray(new PVector[0]);
+		return points.toArray(new Vector[0]);
 	}
 
-	public void render(PGraphics g) {
+	public void render(Graphics g) {
 		g.beginDraw();
 		g.fill(0);
 		g.noStroke();
@@ -135,16 +136,16 @@ public class Player {
 			return;
 		}
 
-		float w = g.width / points.length;
+		double w = g.width / points.length;
 
 		int i = 0;
-		for (PVector pt : points) {
-			float x = (float) ((i + 0.5) * w);
+		for (Vector pt : points) {
+			double x = (double) ((i + 0.5) * w);
 
-			float dist = euclideanDistance(pt);
+			double dist = euclideanDistance(pt);
 
-			float height = distanceToProjectionPlane * Wall.height /  PVector.dist(pos, pt);
-			float brightness = Wall.getBrightness(PVector.dist(pos, pt));
+			double height = distanceToProjectionPlane * Wall.height /  Vector.dist(pos, pt);
+			double brightness = Wall.getBrightness(Vector.dist(pos, pt));
 
 			g.fill(brightness);
 			g.rect(x, g.height / 2, w, height);
@@ -155,9 +156,9 @@ public class Player {
 		g.endDraw();
 	}
 
-	public void minimap(PGraphics g, Main main) {
-		float xscale = (float) g.width / (float) main.width;
-		float yscale = (float) g.height / (float) main.height;
+	public void minimap(Graphics g, Main main) {
+		double xscale = (double) g.width / (double) main.width;
+		double yscale = (double) g.height / (double) main.height;
 
 		g.stroke(0);
 		g.fill(255);
@@ -168,21 +169,21 @@ public class Player {
 		g.stroke(255, 0, 0);
 		g.line(0, 0, 30 * Main.cos(angle), 30 * Main.sin(angle));
 
-		/*for (PVector pt : points) {
+		/*for (Vector pt : points) {
 			g.line(0, 0, (pt.x-pos.x) * xscale, (pt.y -pos.y)* yscale);
 		}*/
 		
 		g.popMatrix();
 	}
 
-	private float euclideanDistance(PVector p) {
+	private double euclideanDistance(Vector p) {
 		if (p == null)
-			return Float.MAX_VALUE;
+			return Double.MAX_VALUE;
 
-		float d = PVector.dist(pos, p);
-		float a = PVector.angleBetween(pos, p) - this.angle;
+		double d = Vector.dist(pos, p);
+		double a = Vector.angleBetween(pos, p) - this.angle;
 
-		return d * Main.cos(Main.radians(a));
+		return d * Math.cos(a);
 	}
 
 	public void updateWalls(Wall[] walls) {
