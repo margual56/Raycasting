@@ -7,7 +7,7 @@ This is a modified version, since the original was made using Processing's libra
 This project diverges and evolves from the Wikipedia article in that I don't use "cells", I use math to define the walls, so they can have any shape and resolution I want. 
 For example, this code creates a wall of a random size, in a random location and at a random angle:
 ```Java
-Wall wall = new Wall(random(width-1), random(height-1), random(width-1), random(height-1));
+Wall wall = new Wall(Math.random(Main.width-1), Math.random(Main.height-1), Math.random(Main.width-1), Math.random(Main.height-1));
 ```
 
 ## License
