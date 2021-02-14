@@ -2,7 +2,7 @@ package geometry;
 
 import app.Main;
 import maths.Segment;
-import maths.Vector;
+import maths.JVector;
 
 public class Wall extends Segment {
 	public static final double height = 1080;
@@ -11,7 +11,7 @@ public class Wall extends Segment {
 		super(d, e, f, g);
 	}
 
-	public Wall(Vector a, Vector b) {
+	public Wall(JVector a, JVector b) {
 		super(a, b);
 	}
 	

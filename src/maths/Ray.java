@@ -10,37 +10,37 @@ public class Ray extends Segment {
 	public Ray(double x1, double y1, double x2, double y2) {
 		super(x1, y1, x1, y2);
 		
-		angle = Vector.angleBetween(getA(), getB());
+		angle = JVector.angleBetween(getA(), getB());
 	}
 
-	public Ray(Vector a, Vector b) {
+	public Ray(JVector a, JVector b) {
 		super(a, b);
 
-		angle = Vector.angleBetween(a, b);
+		angle = JVector.angleBetween(a, b);
 		initialAngle = angle;
 	}
 	
-	public Ray(Vector a, double angle) {
-		super(a, Vector.fromAngle(angle));
+	public Ray(JVector a, double angle) {
+		super(a, JVector.fromAngle(angle));
 		this.angle = angle;
 		initialAngle = angle;
 		
 	}
 	
 	public Ray(double x, double y, double a) {
-		super(new Vector(x, y), Vector.fromAngle(-a));
+		super(new JVector(x, y), JVector.fromAngle(-a));
 		this.angle = a;
 		initialAngle = a;
 	}
 	
 	public void lookAt(double x, double y) {
-		Vector v = new Vector(x, y);
+		JVector v = new JVector(x, y);
 		v.sub(this.getA());
 		v.normalize();
 		this.setB(v);
 	}
 	
-	public Vector cast(Segment s) {
+	public JVector cast(Segment s) {
 		double x1 = s.getA().x;
 		double y1 = s.getA().y;
 		double x2 = s.getB().x;
@@ -60,25 +60,25 @@ public class Ray extends Segment {
 		double u = -((x1 - x2)*(y1 - y3) - (y1 - y2)*(x1 - x3))/denominator;
 		
 		if(0<t && t<1 && u>0) {
-			return new Vector(x1 + t*(x2 - x1), y1 + t*(y2 - y1));
+			return new JVector(x1 + t*(x2 - x1), y1 + t*(y2 - y1));
 		}
 		
 		return null;
 	}
 	
 	public void update(double x, double y) {
-		this.setA(new Vector(x, y));
+		this.setA(new JVector(x, y));
 		//this.setB(this.getA().add(Vector.fromAngle(angle)));
 	}
 	
 	public void update(double a) {
 		this.angle = initialAngle + a;
-		this.setB(Vector.fromAngle(angle));
+		this.setB(JVector.fromAngle(angle));
 	}
 	
 	public void rotate(double a) {
 		this.angle += a;
-		this.setB(Vector.fromAngle(angle));
+		this.setB(JVector.fromAngle(angle));
 	}
 	
 	
