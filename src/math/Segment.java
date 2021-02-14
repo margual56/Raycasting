@@ -1,7 +1,8 @@
-package maths;
+package math;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import app.Main;
 
 public class Segment{

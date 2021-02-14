@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import geometry.Wall;
-import maths.Ray;
-import maths.JVector;
+import math.Ray;
+import math.JVector;
 
 public class Player {
 	public static final double FOV = Math.toRadians(60);

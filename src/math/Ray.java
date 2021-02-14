@@ -1,4 +1,4 @@
-package maths;
+package math;
 
 import java.awt.Color;
 import java.awt.Graphics;

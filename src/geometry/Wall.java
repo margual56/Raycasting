@@ -1,8 +1,8 @@
 package geometry;
 
 import app.Main;
-import maths.Segment;
-import maths.JVector;
+import math.Segment;
+import math.JVector;
 
 public class Wall extends Segment {
 	public static final double height = 1080;
