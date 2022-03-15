@@ -1,5 +1,9 @@
 # Raycasting
-A simple Raycasting project made in Java using the Processing core library
+A simple Raycasting project made in Java using the Processing core library. 
+
+![raycasting](https://user-images.githubusercontent.com/30444886/158455908-736cd6ac-afdc-4ae5-9805-bb22e8c3a033.png)
+
+There are a couple bugs related to the world rotation of the 1st person camera... oh well. This was a sideproject and it is now abandoned.
 
 ## Explanation
 [Here](https://en.wikipedia.org/wiki/Ray_casting) is a good Wikipedia article about the topic. To summarize, we have a series of rays projected from a point in all directions and onto walls, which then are processed as a function of the distance and angle to give the impression of depth.
